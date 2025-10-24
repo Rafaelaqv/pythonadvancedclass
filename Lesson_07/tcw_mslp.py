@@ -1,5 +1,5 @@
 # === Import libraries === 
-""" Import libraries """
+"""Import required libraries for data handling, visualization, and parallel processing."""
 import xarray as xr
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
@@ -8,41 +8,41 @@ import pandas as pd
 import os
 from mpi4py import MPI
 
-# Resto do código funciona normalmente...
- 
 # === MPI setup === 
+"""Initialize MPI for parallel execution"""
 comm = MPI.COMM_WORLD 
 rank = comm.Get_rank()
 size = comm.Get_size()
-print(f"[Rank {rank}] inicializado (total de {size})") 
+print(f"[Rank {rank}] Initialized (total ranks: {size})") 
  
-# === Diretório de saída === 
-# ⭐ CORREÇÃO: Salvar no mesmo diretório do script
+# === Output directory === 
+"""Create an output directory in the same location as the current script"""
 script_dir = os.path.dirname(os.path.abspath(__file__))
 output_dir = os.path.join(script_dir, "animation_frames_new")
 os.makedirs(output_dir, exist_ok=True)
 
-if rank == 0:  # Só printar uma vez
+if rank == 0:  # print only once
     print(f"📁 Diretório de saída: {output_dir}") 
  
-# === Abrir datasets === 
+# === Load datasets === 
+"""Open ERA5 datasets for Total Columm Water (TCW) and Mean Sea Level Pressure (MSLP)"""
 ds_tcw = xr.open_dataset('/N/project/easg690_fall2025/data/ERA5/ds633.0/e5.oper.an.sfc/202106/e5.oper.an.sfc.128_136_tcw.ll025sc.2021060100_2021063023.nc') 
 ds_mslp = xr.open_dataset('/N/project/easg690_fall2025/data/ERA5/ds633.0/e5.oper.an.sfc/202106/e5.oper.an.sfc.128_151_msl.ll025sc.2021060100_2021063023.nc') 
 
-# ⭐ DESCOBRIR QUAL DIA É O ÍNDICE 48 E FILTRAR
+# Identify the time corresponding to index 48
 time_48 = pd.to_datetime(ds_tcw["TCW"].isel(time=48).time.values)
 target_date = time_48.strftime('%Y-%m-%d')
 
 print(f"[Rank {rank}] Índice 48 = {time_48}")
 print(f"[Rank {rank}] Animando o dia: {target_date}")
 
-# Filtrar para apenas aquele dia
+# Select only data for the taget date
 ds_tcw_day = ds_tcw.sel(time=target_date)
 ds_mslp_day = ds_mslp.sel(time=target_date)
 
 print(f"[Rank {rank}] Total de frames: {len(ds_tcw_day.time)}")
  
-# === Configurações do mapa === 
+# === Map configuration - Nice Map === 
 clon, clat = -60, -20 
 projection = ccrs.Orthographic(clon, clat) 
 extent = [-90, -30, -60, 15] 
@@ -54,19 +54,19 @@ plt.rcParams.update({
     "font.family": "sans-serif" 
 }) 
  
-# === Loop paralelo === 
+# === Parallel plotting loop === 
 for i in range(rank, len(ds_tcw_day.time), size): 
-    # Extrair as variáveis (mesmo jeito que você fazia!)
+    # Extract variables for the current time step
     tcw = ds_tcw_day["TCW"].isel(time=i) 
-    mslp = ds_mslp_day["MSL"].isel(time=i) / 100  # Converter Pa para hPa
+    mslp = ds_mslp_day["MSL"].isel(time=i) / 100  # Convert Pa to hPa
     
-    # Extrair tempo como datetime (mesmo jeito!)
+    # Extract time value as datetime
     time = pd.to_datetime(tcw.time.values) 
  
-    # === Criar figura === 
+    # === Create figure === 
     fig, axes = plt.subplots(1, 2, figsize=(14, 6), subplot_kw=dict(projection=projection)) 
  
-    # === Painel 1: TCW === 
+    # === Panel (a): Total Column Water (TCW) === 
     im1 = tcw.plot( 
         ax=axes[0], 
         transform=ccrs.PlateCarree(), 
@@ -93,7 +93,7 @@ for i in range(rank, len(ds_tcw_day.time), size):
                 fontsize=14, fontweight='bold', va='top', ha='left',
                 bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
  
-    # === Painel 2: MSLP === 
+    # === Panel (b): Mean Sea Level Pressure (MSLP) === 
     im2 = mslp.plot( 
         ax=axes[1], 
         transform=ccrs.PlateCarree(), 
@@ -122,10 +122,10 @@ for i in range(rank, len(ds_tcw_day.time), size):
  
     plt.tight_layout() 
  
-    # === Salvar figura === 
+    # === Save figure === 
     output_file = os.path.join(output_dir, f"panel_tcw_mslp_{i:05d}.png") 
     fig.savefig(output_file, dpi=300, bbox_inches="tight", facecolor="white") 
     plt.close(fig) 
     print(f"[Rank {rank}] → Figura {i+1}/{len(ds_tcw_day.time)}: {output_file}")
 
-print(f"[Rank {rank}] ✅ Concluído!")
+print(f"[Rank {rank}] ✅ Completed!")
