@@ -142,13 +142,84 @@ The following timeline outlines the planned stages for completing the project. E
 
 The final figure will combine spatial and temporal visualizations to illustrate the distribution and evolution of heatwaves across Rio de Janeiro.
 
-- A time series plot will display the number of heatwave events for three selected regions — the city of Rio de Janeiro, the state of Rio de Janeiro (aggregate), and Petrópolis (a high-altitude municipality) — within the same graph, allowing for direct comparison of temporal trends.
+- **Time series plots:**  
+  A time series plot will show the number of heatwave events for three selected regions — the city of Rio de Janeiro, the state of Rio de Janeiro (aggregated), and Petrópolis (a high-altitude municipality) — within the same graph, allowing for a direct comparison of temporal trends.  
+  These time series will be stratified by both **duration** (3–4 days, 5–7 days, and >7 days) and **percentile thresholds** (80th, 90th, and 95th).
 
-- Spatial maps will show the average number of heatwaves per municipality, computed for two distinct 30-year periods (e.g., 1940–1970 and 1994–2024), enabling the visualization of long-term changes.
+- **Spatial maps:**  
+  Spatial maps will present the average number of heatwaves per municipality, calculated for two distinct 30-year climatological periods (e.g., 1940–1970 and 1994–2024), enabling the visualization of long-term changes across the state.
 
-- Each map will be generated for different percentile thresholds (80th, 90th, and 95th) to highlight how heatwave frequency and spatial distribution vary depending on the threshold used.
+- **Multiple definitions:**  
+  Each map will be generated for all combinations of **percentile thresholds** (80th, 90th, 95th) and **heatwave durations** (3–4 days, 5–7 days, >7 days), highlighting how heatwave frequency and spatial distribution vary depending on the definition used.
 
-- All visualizations will employ a continuous color scale (e.g., matplotlib colormap YlOrRd) to represent heatwave intensity and will be produced using matplotlib and seaborn for consistency and high-quality outputs.
- 
+- **Visualization style:**  
+  All figures will use a continuous color scale (e.g., the matplotlib `YlOrRd` colormap) to represent heatwave intensity and will be produced using `matplotlib` and `seaborn` for consistency and high-quality outputs.
+
+---
+### Summary of the Final Layout
+
+In the end, the final figure will consist of **two main panels**:
+
+1. **Time Series Panel:**  
+   Organized by percentile threshold and duration.
+
+2. **Spatial Maps Panel:**  
+   Also organized by percentile threshold and duration, covering the state of Rio de Janeiro.
+
+Below, I provide an example layout for both panels.
+
+ ```text
+ --------------------------------------------------------------
+ |                    Heatwaves per Year (tittle)             |
+ --------------------------------------------------------------
+                                             Legend
+ (a) 80th percentile or 3–4 days
+ --------------------------------------------------------------
+ |   — Rio de Janeiro     — Petrópolis     — RJ State         |
+ |                                                            |
+ |                 [time series: 1940–2024]                   |
+ --------------------------------------------------------------
+
+ (b) 90th percentile or 5–7 days
+ --------------------------------------------------------------
+ |   — Rio de Janeiro     — Petrópolis     — RJ State         |
+ |                                                            |
+ |                 [time series: 1940–2024]                   |
+ --------------------------------------------------------------
+
+ (c) 95th percentile or >7 days
+ --------------------------------------------------------------
+ |   — Rio de Janeiro     — Petrópolis     — RJ State         |
+ |                                                            |
+ |                 [time series: 1940–2024]                   |
+ --------------------------------------------------------------
+```
+
+```text
+                            Tittle 
+ --------------------------------------------------------------
+ |                        1940–1970                           |
+ --------------------------------------------------------------
+ |   (A) 80th      |      (B) 90th      |     (C) 95th        |
+ |   or 3–4 days          or 5–7 days   |       or >7 days
+     [mapa RJ]     |      [mapa RJ]     |     [mapa RJ]       |
+ --------------------------------------------------------------
+ |                        1994–2024                           |
+ --------------------------------------------------------------
+ |   (A) 80th      |      (B) 90th      |     (C) 95th        |
+ |   or 3–4 days   |      or 5–7 days   |      or >7 days
+     [mapa RJ]     |      [mapa RJ]     |     [mapa RJ]       |
+ --------------------------------------------------------------
+ |                      Colorbar (YlOrRd)                     |
+ --------------------------------------------------------------
+ ```
+
+## Figure 1 – Time Series Panel Mockup
+![Time Series Panel](figure_2.png)
+
+## Figure 2 – Spatial Heatwave Panel Mockup
+![Spatial Heatwave Panel](figure_1.png)
+
+
 
 
