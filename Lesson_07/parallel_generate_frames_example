@@ -1,0 +1,21 @@
+from mpi4py import MPI
+import generate_frame
+
+# get the MPI communicator
+comm = MPI.COMM_WORLD
+
+# get the rank of the current process
+rank = comm.rank
+size = comm.size 
+
+# Define how many frames to generate (N)
+N = 100 
+
+for i in range(rank, N, size):
+    generate_frame.generate_frame(i)
+
+
+## To generate N frames using M processors, you can loop over all frame indices and assign them cyclically across the variable ranks. 
+## This ensures that each processor handles every M-th frame, allowing you to generate any number of frames (N) with fixed number of processors (M). 
+
+
