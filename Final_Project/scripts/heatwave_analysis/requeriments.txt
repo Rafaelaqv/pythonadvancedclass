@@ -1,0 +1,12 @@
+numpy
+pandas
+xarray
+rioxarray
+netCDF4
+geopandas
+shapely
+mpi4py
+matplotlib
+seaborn
+tqdm
+jupyter
