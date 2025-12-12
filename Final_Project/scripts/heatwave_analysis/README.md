@@ -292,12 +292,13 @@ For the parallel scripts (run_parallel_extract.py and heatwave_mpi.py) to work, 
 
 ### Required Python Libraries
 
-| Category          | Libraries                                      |
-|-------------------|------------------------------------------------|
-| **Core Processing** | `xarray`, `numpy`, `pandas`, `mpi4py`        |
-| **Geospatial**      | `geopandas`, `rioxarray`, `shapely`          |
-| **Visualization**   | `matplotlib`, `seaborn`                      |
-| **Utilities**       | `tqdm` *(Progress bars)*                     |
+| Category | Libraries |
+| :--- | :--- |
+| **Core Processing** | `xarray`, `numpy`, `pandas`, `mpi4py` |
+| **Statistical Analysis** | `scipy` |
+| **Geospatial** | `geopandas`, `rioxarray`, `shapely`, `netCDF4` |
+| **Visualization** | `matplotlib`, `seaborn` |
+| **Utilities** | `tqdm` *(Progress bars)*, `jupyter` |
 
 > *Note: Standard Python libraries used include `os`, `sys`, `shutil`, `itertools`, and `typing`.*
 
